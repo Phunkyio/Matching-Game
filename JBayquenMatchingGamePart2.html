@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Hey there! I've added comments for any reasoning I thought would be different from the norm. Hope you learn something! -->
+  <title>Matching Game</title>
+  <meta name="author" content="Jason Bayquen">
+  <style>
+    img {
+      position: absolute;
+    }
+    div {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+    }
+    #rightSide{
+      left: 500px;
+      border-left: 1px solid black;
+    }
+  </style>
+  <script>
+    //declaring global variables
+    /*here the variables are created to allocate memory but not set, they are set
+	in the setGlobals function; this is done to prevent the loading of the variables
+	before the DOM is loaded. Not doing so will create a reference error in theLeftSide
+	as it will try to set the object to an element that does not exist*/
+    var numberOfFaces, theLeftSide;
+    
+    //declaring functions
+    function generateFaces(){
+      for(var c = 0; c < numberOfFaces; c++){
+        console.log("running loop "+ c);
+        var face = document.createElement("img");
+        face.src = "http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png";
+        face.style.top = Math.random()*400 + "px";
+        face.style.left = Math.random()*400 + "px";
+        theLeftSide.appendChild(face);    
+      }
+    console.log("left side: " + theLeftSide);
+    }
+    function setGlobals(){
+      numberOfFaces = 5;
+	  //this has to be in a function that is called after the page loads.
+      theLeftSide = document.getElementById("leftSide");
+      }     
+                                       
+    //onload
+    /*I choose to use this function to onload rather than adding it to the body element, in preference of keeping all javascript out of the html portion of the code*/
+    window.onload = function(){
+      setGlobals();
+      console.log(theLeftSide);
+      generateFaces();
+      };
+  </script>
+</head>
+
+<body>
+  <h1>Matching Game</h1>
+  <h3>Click on the extra smiling face on the left.</h3>
+  <div id="leftSide">
+  </div>
+  <div id="rightSide">
+  </div>
+</body>
+
+</html>

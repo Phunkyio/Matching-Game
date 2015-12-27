@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Hey there! I've added comments for any reasoning I thought would be different from the norm. Hope you learn something! -->
+  <title>Matching Game</title>
+  <meta name="author" content="Jason Bayquen">
+  <style>
+    img {
+      position: absolute;
+    }
+    div {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+    }
+    #rightSide{
+      left: 500px;
+      border-left: 1px solid black;
+    }
+  </style>
+  <script>
+    //declaring global variables
+    /*here the variables are created to allocate memory but not set,
+	they are set in the setGlobals function; this is done to prevent
+	the loading of the variables before the DOM is loaded. Not doing
+	so will create a reference error in theLeftSide/theRightSide as it
+	will try to set the object to an element that does not exist*/
+    var numberOfFaces, theLeftSide, theRightSide, theBody;
+    
+    //functions
+	/* you might notice that i've created several additional functions
+	in favor of smaller functions compared to huge ones. Here's some
+	advice from someone who has been programming for a few years:
+	Testing code that does lots of things is difficult, debugging code that
+	does lots of things is difficult, the solution to both of these problems
+	is to write code that doesn't do lots of things.*/
+    function clearDiv(){
+      while (theLeftSide.firstChild) {
+        theLeftSide.removeChild(theLeftSide.firstChild);
+      }
+      while (theRightSide.firstChild) {
+        theRightSide.removeChild(theRightSide.firstChild);
+      }
+    }
+    function generateFaces(){
+      var leftImages; 
+      /* declaring for later use. If var is not included, it is
+	  declared as a global variable. This could have been declared
+	  later in the function(when it is actually used), but it is
+	  neater to keep all variable declarations at the top of a function. */
+    
+      for(var c = 0; c < numberOfFaces; c++){
+        console.log("running loop "+ c);
+        var face = document.createElement("img");
+        face.src = "http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png";
+        face.style.top = Math.random()*400 + "px";
+        face.style.left = Math.random()*400 + "px";
+        theLeftSide.appendChild(face);    
+      }
+      leftImages = theLeftSide.cloneNode(true);
+      leftImages.removeChild(leftImages.lastChild);
+      theRightSide.appendChild(leftImages);
+      console.log("left side: " + theLeftSide);
+      theLeftSide.lastChild.onclick = function(e){nextLevel(e);}; //e for event.
+      theBody.onclick = function(){gameOver();};
+    }
+	// just a note on these next two, if they are called from the event handler without it constructing a function, the page will get stuck in an infinite loop.
+	function gameOver(){
+		theBody.onclick = null;
+		theLeftSide.lastChild.onclick = null;
+		alert("Game Over!");
+		clearDiv();
+		numberOfFaces = 5;
+		generateFaces();
+	}
+    function nextLevel(e){
+      console.log("nextLevel has been run");
+      e.stopPropagation();
+      numberOfFaces += 5;
+      clearDiv();
+      generateFaces();
+      }
+    function setGlobals(){
+      numberOfFaces = 5;
+	  //these have to be in a function that is called after the page loads.
+	  //decided not to include these in the generateFaces function, though you can if you want,
+	  //it'll cause them to be declared every time generateFaces is called, which is inefficient.
+      theLeftSide = document.getElementById("leftSide");
+      theRightSide = document.getElementById("rightSide"); //added for part 3 of assignment
+      theBody = document.getElementsByTagName("body")[0];  //added for part 4 of assignment
+      }     
+                                 
+    //onload
+    /*I choose to use this function to onload rather than adding
+	it to the body element, in preference of keeping all javascript
+	out of the html portion of the code*/
+    window.onload = function(){
+      setGlobals();
+      console.log(theLeftSide);
+      generateFaces();                                  
+      };
+  </script>
+</head>
+
+<body>
+  <h1>Matching Game</h1>
+  <h3>Click on the extra smiling face on the left.</h3>
+  <div id="leftSide">
+  </div>
+  <div id="rightSide">
+  </div>
+</body>
+
+</html>
